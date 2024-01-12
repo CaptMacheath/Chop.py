@@ -32,6 +32,7 @@ model = []
 model_size = 0
 with open(file_path, 'r') as f:
     reader = csv.reader(f)
+    next(reader)
     for _, line in enumerate(reader):
         model.append([line[0], int(line[1])])
         model_size += int(line[1])
@@ -66,7 +67,7 @@ for b in range(0, num_buckets):
 percentage_displayed = 0
 for b in range(0, len(chopped_model)):
     percentage_displayed += 100 / num_buckets
-    print('{0}% of model:'.format(percentage_displayed))
+    print('~{0}% of model:'.format(int(percentage_displayed)))
     for name, num_units in chopped_model[b]:
         print('{0} [{1} units]'.format(name, num_units))
     print()
