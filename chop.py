@@ -1,10 +1,10 @@
-import bisect
 import csv
+import sys
 from bisect import bisect_left
 
 # Source: https://stackoverflow.com/a/12141511
 def pick_closest(target, options):
-    # options.sort()  # Technically needed but not the way I'm using this function
+    options.sort()
     pos = bisect_left(options, target)
     if pos == 0:
         return options[0]
@@ -17,9 +17,15 @@ def pick_closest(target, options):
     else:
         return before
 
-# Initialize variables
-file_path = 'Lateralus.csv'
-num_buckets = 4
+# Initialize variables from command line arguments
+if len(sys.argv) < 2:
+    print('No input file provided, exiting')
+    quit
+file_path = sys.argv[1]
+if len(sys.argv) < 3:
+    num_buckets = 10
+else:
+    num_buckets = int(sys.argv[2])
 
 # Read model from file and make initial calculations about its size
 model = []
@@ -42,7 +48,7 @@ for b in range(0, num_buckets):
     for e in range(next, len(model)):
         possible_size_read = actual_size_read + model[e][1]
         # If the bucket will not overflow with this next entry...
-        if possible_size_read < ideal_size_read:
+        if possible_size_read <= ideal_size_read:
             bucket.append(model[e])
             actual_size_read = possible_size_read
             next += 1
